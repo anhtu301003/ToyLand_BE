@@ -1,25 +1,30 @@
 server:
   port: 8080
-
+  servlet:
+    context-path: /identity
 spring:
-  application:
-    name: authentication-service
   datasource:
-    url: jdbc:mysql://localhost:3306/toyland_auth?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: "jdbc:mysql://localhost:3306/toyland_auth"
     username: root
     password: 12345678
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
 
 jwt:
   signerKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
-  valid-duration: 3600 # in second
-  refreshable-duration: 36000 # in seconds
 
+app:
+  services:
+    user: http://localhost:8081/user
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
+    feign.Client: DEBUG
