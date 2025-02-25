@@ -9,8 +9,11 @@ import com.toyland.authentication_service.entity.User;
 import com.toyland.authentication_service.exception.AppException;
 import com.toyland.authentication_service.exception.ErrorCode;
 import com.toyland.authentication_service.mapper.UserMapper;
+import com.toyland.authentication_service.mapper.UserProfileMapper;
 import com.toyland.authentication_service.repository.RoleRepository;
 import com.toyland.authentication_service.repository.UserRepository;
+import com.toyland.authentication_service.repository.httpclient.UserClient;
+import feign.FeignException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +35,8 @@ public class UserService {
     RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    UserClient userClient;
+    UserProfileMapper userProfileMapper;
 
     public UserResponse createUser(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
@@ -43,8 +48,19 @@ public class UserService {
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
 
         user.setRoles(roles);
+        user = userRepository.save(user);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        var userProfileRequest = userProfileMapper.toProfileCreationRequest(request);
+        userProfileRequest.setUserId(user.getId());
+
+
+        try {
+            userClient.createProfile(userProfileRequest);
+        } catch (FeignException e) {
+            System.out.print(e.getMessage());
+        }
+
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse getMyInfo() {

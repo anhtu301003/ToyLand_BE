@@ -1,4 +1,4 @@
-package com.toyland.authentication_service.dto.response;
+package com.toyland.user_service.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,8 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfileResponse {
-    String id;
+public class ProfileCreationRequest {
     String userId;
     String firstName;
     String lastName;
