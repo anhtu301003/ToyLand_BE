@@ -1,8 +1,7 @@
-package com.toyland.authentication_service.configuration;
+package com.toyland.user_service.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
-            "/users/**", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh"
+        "/users/**","/internal/users/** "
     };
 
     private final CustomJwtDecoder customJwtDecoder;

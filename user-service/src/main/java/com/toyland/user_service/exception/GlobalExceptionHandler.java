@@ -1,6 +1,6 @@
-package com.toyland.authentication_service.exception;
+package com.toyland.user_service.exception;
 
-import com.toyland.authentication_service.dto.ApiResponse;
+import com.toyland.user_service.dto.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

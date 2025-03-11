@@ -1,4 +1,4 @@
-package com.toyland.authentication_service.dto.response;
+package com.toyland.authentication_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
