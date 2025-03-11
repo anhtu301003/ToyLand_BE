@@ -1,6 +1,6 @@
 package com.toyland.authentication_service.controller;
 
-import com.toyland.authentication_service.dto.response.ApiResponse;
+import com.toyland.authentication_service.dto.ApiResponse;
 import com.toyland.authentication_service.dto.request.PermissionRequest;
 import com.toyland.authentication_service.dto.response.PermissionResponse;
 import com.toyland.authentication_service.service.PermissionService;

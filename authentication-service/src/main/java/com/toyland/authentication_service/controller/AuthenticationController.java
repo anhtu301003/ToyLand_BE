@@ -5,7 +5,7 @@ import com.toyland.authentication_service.dto.request.AuthenticationRequest;
 import com.toyland.authentication_service.dto.request.IntrospectRequest;
 import com.toyland.authentication_service.dto.request.LogoutRequest;
 import com.toyland.authentication_service.dto.request.RefreshRequest;
-import com.toyland.authentication_service.dto.response.ApiResponse;
+import com.toyland.authentication_service.dto.ApiResponse;
 import com.toyland.authentication_service.dto.response.AuthenticationResponse;
 import com.toyland.authentication_service.dto.response.IntrospectResponse;
 import com.toyland.authentication_service.service.AuthenticationService;
