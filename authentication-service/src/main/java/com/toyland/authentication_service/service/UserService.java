@@ -13,11 +13,13 @@ import com.toyland.authentication_service.mapper.UserProfileMapper;
 import com.toyland.authentication_service.repository.RoleRepository;
 import com.toyland.authentication_service.repository.UserRepository;
 import com.toyland.authentication_service.repository.httpclient.UserClient;
+import com.toyland.event.dto.NotificationEvent;
 import feign.FeignException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     UserClient userClient;
     UserProfileMapper userProfileMapper;
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     public UserResponse createUser(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
@@ -59,6 +63,16 @@ public class UserService {
         } catch (FeignException e) {
             System.out.print(e.getMessage());
         }
+
+        NotificationEvent notificationEvent = NotificationEvent.builder()
+                .channel("EMAIL")
+                .recipient(request.getEmail())
+                .subject("Welcome to Toyland")
+                .body("Hello, " + user.getUsername())
+                .build();
+
+        //Publish message to kafka
+        kafkaTemplate.send("notification-delivery",notificationEvent);
 
         return userMapper.toUserResponse(user);
     }
