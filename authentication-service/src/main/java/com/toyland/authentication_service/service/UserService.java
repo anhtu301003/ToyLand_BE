@@ -15,6 +15,7 @@ import com.toyland.authentication_service.repository.UserRepository;
 import com.toyland.authentication_service.repository.httpclient.UserClient;
 import com.toyland.event.dto.NotificationEvent;
 import feign.FeignException;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -56,7 +57,6 @@ public class UserService {
 
         var userProfileRequest = userProfileMapper.toProfileCreationRequest(request);
         userProfileRequest.setUserId(user.getId());
-
 
         try {
             userClient.createProfile(userProfileRequest);

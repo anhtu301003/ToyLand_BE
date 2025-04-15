@@ -1,6 +1,6 @@
 package com.toyland.user_service.service;
 
-import com.toyland.user_service.dto.request.ProfileCreationRequest;
+import com.toyland.user_service.dto.request.UserProfileRequest;
 import com.toyland.user_service.dto.response.UserProfileResponse;
 import com.toyland.user_service.entity.UserProfile;
 import com.toyland.user_service.mapper.UserProfileMapper;
@@ -21,9 +21,9 @@ public class UserProfileService {
 
     UserProfileMapper userProfileMapper;
 
-    public UserProfileResponse createUserProfile(ProfileCreationRequest request){
+    public UserProfileResponse createUserProfile(UserProfileRequest request){
         UserProfile userProfile = userProfileMapper.toUserProfile(request);
-        userProfile = userProfileRepository.save(userProfile);
+        userProfileRepository.save(userProfile);
 
         return userProfileMapper.toUserProfileResponse(userProfile);
     }
@@ -33,10 +33,24 @@ public class UserProfileService {
         return userProfileMapper.toUserProfileResponse(userProfile);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<UserProfileResponse> getAllProfiles(){
         var profiles = userProfileRepository.findAll();
         return profiles.stream().map(
                 userProfileMapper::toUserProfileResponse).toList();
+    }
+
+    public UserProfileResponse updateUserProfile(String id,UserProfileRequest request) {
+        UserProfile userProfile = userProfileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        userProfileMapper.updateUserProfile(userProfile,request);
+
+        userProfile = userProfileRepository.save(userProfile);
+        return userProfileMapper.toUserProfileResponse(userProfile);
+    }
+
+    public void deleteUserProfile(String id) {
+        UserProfile userProfile = userProfileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        userProfileRepository.deleteById(id);
     }
 }

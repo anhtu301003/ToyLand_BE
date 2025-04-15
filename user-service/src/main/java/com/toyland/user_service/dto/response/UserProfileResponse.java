@@ -12,9 +12,11 @@ import java.util.Date;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserProfileResponse {
-    String id;
-    String firstName;
-    String lastName;
-    LocalDate dob;
-    String city;
+     String userId;
+     String email;
+     String fullName;
+     String avatarUrl;
+     LocalDate birthDay;
+     String gender;
+
 }

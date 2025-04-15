@@ -1,37 +1,28 @@
 package com.toyland.user_service.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfile {
+public class UserAddress {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String userId;
-    String email;
-    String fullName;
-    String avatarUrl;
-    LocalDate birthDay;
-    String gender;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<UserAddress> addresses;
-
-
+    String phoneNumber;
+    String city;
+    String state;
+    String country;
+    String postalCode;
+    Boolean isDefault;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt;
@@ -39,4 +30,8 @@ public class UserProfile {
     @UpdateTimestamp
     @Column(nullable = false)
     LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    UserProfile user;
 }

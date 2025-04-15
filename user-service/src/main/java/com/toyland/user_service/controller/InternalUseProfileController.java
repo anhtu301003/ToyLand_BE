@@ -1,6 +1,6 @@
 package com.toyland.user_service.controller;
 
-import com.toyland.user_service.dto.request.ProfileCreationRequest;
+import com.toyland.user_service.dto.request.UserProfileRequest;
 import com.toyland.user_service.dto.response.UserProfileResponse;
 import com.toyland.user_service.service.UserProfileService;
 import lombok.AccessLevel;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class InternalUseProfileController {
     UserProfileService userProfileService;
 
-    @PostMapping(value = "/internal/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    UserProfileResponse createProfile(@RequestBody ProfileCreationRequest request) {
+    @PostMapping(value = "/internal", produces = MediaType.APPLICATION_JSON_VALUE)
+    UserProfileResponse createProfile(@RequestBody UserProfileRequest request) {
         System.out.print(request.toString());
         return userProfileService.createUserProfile(request);
     }

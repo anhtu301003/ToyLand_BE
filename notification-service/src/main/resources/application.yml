@@ -24,4 +24,4 @@ spring:
         spring.json.trusted.packages: "*"
 
 app:
-  brevo-key: "my-bravo-key"
+  brevo-key: "my-secret-key"
