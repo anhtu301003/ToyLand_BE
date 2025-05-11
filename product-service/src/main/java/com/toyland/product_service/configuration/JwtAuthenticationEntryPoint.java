@@ -1,8 +1,8 @@
 package com.toyland.product_service.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toyland.user_service.dto.ApiResponse;
-import com.toyland.user_service.exception.ErrorCode;
+import com.toyland.product_service.dto.ApiResponse;
+import com.toyland.product_service.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
