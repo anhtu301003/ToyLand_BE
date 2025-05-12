@@ -7,6 +7,7 @@ import com.toyland.product_service.mapper.ProductMapper;
 import com.toyland.product_service.repository.BrandRepository;
 import com.toyland.product_service.repository.CategoryRepository;
 import com.toyland.product_service.repository.ProductRepository;
+import com.toyland.product_service.service.IServices.IProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,19 +17,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @RequiredArgsConstructor
 @Slf4j
-public class ProductService {
+public class ProductService implements IProductService {
 
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
     BrandRepository brandRepository;
     ProductMapper productMapper;
 
+    @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
 
         Product product = productMapper.toProduct(productRequest);
@@ -47,17 +48,20 @@ public class ProductService {
         return productMapper.toProductResponse(product);
     }
 
+    @Override
     public List<ProductResponse> getAllProducts() {
         return productRepository.findAll().stream().map(productMapper::toProductResponse).toList();
     }
 
+    @Override
     public ProductResponse getProductById(String id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
         return productMapper.toProductResponse(product);
     }
 
-    public ProductResponse updateProduct(ProductRequest productRequest,String id) {
+    @Override
+    public ProductResponse updateProduct(ProductRequest productRequest, String id) {
         Product product = productRepository.findById(id).orElse(null);
 
         productMapper.updateProductFromRequest(productRequest, product);
@@ -74,6 +78,7 @@ public class ProductService {
         return productMapper.toProductResponse(product);
     }
 
+    @Override
     public void deleteProductById(String id) {
         // Kiểm tra xem sản phẩm có tồn tại không
         if (!productRepository.existsById(id)) {

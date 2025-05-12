@@ -47,6 +47,4 @@ public class ProductResponse {
     int viewsCount; //lượt xem
 
     List<String> image;
-
-    List<Attribute> attributes;
 }

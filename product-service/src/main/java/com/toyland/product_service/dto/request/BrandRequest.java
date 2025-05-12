@@ -11,6 +11,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Document
 public class BrandRequest {
-    String id;
     String nameBrand;
 }

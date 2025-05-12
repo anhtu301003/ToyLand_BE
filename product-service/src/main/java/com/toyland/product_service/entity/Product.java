@@ -50,6 +50,7 @@ public class Product {
     Boolean isLimitedEdition;//hàng giới hạn
     Integer LimitedQuantity;// số lượng giới hạn
     Date releaseDate;//ngày phát hành
+
     @Indexed
     StatusProduct statusProduct; // trạng thái sản phẩm(đang bán, ngừng bán, sắp ra mắt, hết hàng)
 
@@ -60,8 +61,6 @@ public class Product {
     int viewsCount; //lượt xem
 
     List<String> image;
-
-    List<Attribute> attributes;
 
     @CreatedDate
     private LocalDateTime createdAt;
