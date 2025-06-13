@@ -1,10 +1,14 @@
 package com.toyland.authentication_service.configuration;
 
 import com.toyland.authentication_service.constant.PredefinedRole;
+import com.toyland.authentication_service.dto.request.ProfileCreationRequest;
+import com.toyland.authentication_service.dto.request.UserCreationRequest;
 import com.toyland.authentication_service.entity.Role;
 import com.toyland.authentication_service.entity.User;
 import com.toyland.authentication_service.repository.RoleRepository;
 import com.toyland.authentication_service.repository.UserRepository;
+import com.toyland.authentication_service.repository.httpclient.UserClient;
+import com.toyland.event.dto.CreateUserEvent;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,6 +18,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
@@ -25,6 +30,7 @@ import java.util.HashSet;
 public class ApplicationInitConfig {
 
     PasswordEncoder passwordEncoder;
+    KafkaTemplate<String,Object> kafkaTemplate;
 
     @NonFinal
     static final String ADMIN_USER_NAME = "admin";
@@ -60,7 +66,17 @@ public class ApplicationInitConfig {
                         .roles(roles)
                         .build();
 
-                userRepository.save(user);
+                User saveUser = userRepository.save(user);
+
+                CreateUserEvent userCreationEvent = CreateUserEvent.builder()
+                        .userId(saveUser.getId())
+                        .email("admin@yopmail.com")
+                        .fullName("Admin")
+                        .admin(true)
+                        .build();
+
+                kafkaTemplate.send("user-delivery", userCreationEvent);
+
                 log.warn("admin user has been created with default password: admin, please change it");
             }
             log.info("Application initialization completed .....");

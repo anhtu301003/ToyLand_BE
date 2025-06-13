@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-#  product-service:
-#    build: ./product-service
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - mongodb
-#    environment:
-#      SPRING_DATA_MONGODB_URI: mongodb://admin:12345678@mongodb:27017/product-service?authSource=admin
-#    networks:
-#      - backend
-
   kafka:
     image: 'bitnami/kafka:3.7.0'
     container_name: kafka

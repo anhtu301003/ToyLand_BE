@@ -25,4 +25,4 @@ jwt:
   refreshable-duration: 36000 # in seconds
 app:
   services:
-    user: http://localhost:8081/users
+    user: http://localhost:8081/user

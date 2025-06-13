@@ -1,15 +1,14 @@
 package com.toyland.product_service.controller;
 
 import com.toyland.product_service.dto.ApiResponse;
+import com.toyland.product_service.dto.request.CategoryRequest;
 import com.toyland.product_service.dto.response.CategoryResponse;
 import com.toyland.product_service.service.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +25,15 @@ public class CategoryController {
         return ApiResponse.<List<CategoryResponse>>builder()
                 .result(categoryService.getAllCategories())
                 .build();
+    }
+
+    @PutMapping("/{categoryId}")
+    public ApiResponse<CategoryResponse> updateCategory(@PathVariable String categoryId, @RequestBody CategoryRequest categoryRequest) {
+        return null;
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ApiResponse<String> deleteCategory(@PathVariable String categoryId) {
+        return null;
     }
 }

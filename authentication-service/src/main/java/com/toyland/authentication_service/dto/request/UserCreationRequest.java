@@ -22,5 +22,6 @@ public class UserCreationRequest {
     String password;
     String email;
     String fullName;
+    Boolean admin;
     String gender;
 }

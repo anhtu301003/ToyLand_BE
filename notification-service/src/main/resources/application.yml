@@ -1,6 +1,6 @@
 
 server:
-  port: 8082
+  port: 8088
   servlet:
     context-path: /notification
 
@@ -24,4 +24,4 @@ spring:
         spring.json.trusted.packages: "*"
 
 app:
-  brevo-key: "my-secret-key"
+  brevo-key: "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"

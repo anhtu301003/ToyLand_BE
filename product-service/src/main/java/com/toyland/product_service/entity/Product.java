@@ -31,12 +31,12 @@ public class Product {
     String name;//tên sản phẩm
 
     @Indexed(unique = true)
-    String slug;//url sản phẩm
+    String url;//url sản phẩm
 
-    String description; //mô tả sản phẩm
-    String shortDescription;//mô tả ngắn của sản phẩm
+    String content; //mô tả sản phẩm
 
     Long price;//giá sản phẩm
+
     Long originalPrice;//giá gốc sản phẩm
 
     @DBRef(lazy = true)
@@ -47,16 +47,19 @@ public class Product {
 
     List<String> Tags;
 
-    Boolean isLimitedEdition;//hàng giới hạn
-    Integer LimitedQuantity;// số lượng giới hạn
-    Date releaseDate;//ngày phát hành
+    @Builder.Default
+    Boolean isLimitedEdition = false;//hàng giới hạn
+
+    LocalDateTime releaseDate;//ngày phát hành
 
     @Indexed
-    StatusProduct statusProduct; // trạng thái sản phẩm(đang bán, ngừng bán, sắp ra mắt, hết hàng)
+    StatusProduct statusProduct = StatusProduct.AVAILABLE; // trạng thái sản phẩm(đang bán, ngừng bán, sắp ra mắt, hết hàng)
 
-    boolean trending;//đánh dấu sản phẩm nội bật để hiện thị ở vị trí đặc biệt
+    @Builder.Default
+    Boolean trending = false;//đánh dấu sản phẩm nội bật để hiện thị ở vị trí đặc biệt
 
-    boolean newProduct;// đánh dấu là sản phẩm mới
+    @Builder.Default
+    Boolean newProduct = true;// đánh dấu là sản phẩm mới
 
     int viewsCount; //lượt xem
 

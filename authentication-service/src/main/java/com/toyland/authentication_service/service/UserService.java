@@ -57,6 +57,7 @@ public class UserService {
 
         var userProfileRequest = userProfileMapper.toProfileCreationRequest(request);
         userProfileRequest.setUserId(user.getId());
+        userProfileRequest.setAdmin(false);
 
         try {
             userClient.createProfile(userProfileRequest);

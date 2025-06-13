@@ -8,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +30,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public ApiResponse<List<ProductResponse>> getAllProducts() {
-        return ApiResponse.<List<ProductResponse>>builder()
-                .result(productService.getAllProducts())
+    public ApiResponse<Page<ProductResponse>> getAllProducts(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<Page<ProductResponse>>builder()
+                .result(productService.getAllProducts(PageRequest.of(page - 1, size)))
                 .build();
     }
 
@@ -42,9 +44,9 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ProductResponse> updateProductById(@RequestBody ProductRequest productRequest,@PathVariable String id) {
+    public ApiResponse<ProductResponse> updateProductById(@RequestBody ProductRequest productRequest, @PathVariable String id) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productService.updateProduct(productRequest,id))
+                .result(productService.updateProduct(productRequest, id))
                 .build();
     }
 

@@ -20,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class BrandController {
     BrandService brandService;
+
     @GetMapping
     public ApiResponse<List<BrandResponse>> getAllBrands() {
         return ApiResponse.<List<BrandResponse>>builder()

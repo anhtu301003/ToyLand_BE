@@ -14,4 +14,6 @@ public class ProfileCreationRequest {
     String userId;
     String fullName;
     String gender;
+    String email;
+    Boolean admin;
 }

@@ -18,6 +18,8 @@ public class WebClientConfiguration {
     public WebClient webClient() {
         return WebClient.builder()
                 .baseUrl("http://localhost:8080/identity")
+                .baseUrl("http://localhost:8081/user")
+                .baseUrl("http://localhost:8082/product")
                 .build();
     }
 

@@ -14,5 +14,5 @@ public class UserAddressRequest {
     String state;
     String country;
     String postalCode;
-    Boolean isDefault;
+    boolean isDefault;
 }

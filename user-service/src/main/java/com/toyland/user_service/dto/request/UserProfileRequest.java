@@ -16,4 +16,6 @@ public class UserProfileRequest {
     String avatarUrl;
     LocalDate birthDay;
     String gender;
+    String phoneNumber;
+    Boolean admin;
 }
