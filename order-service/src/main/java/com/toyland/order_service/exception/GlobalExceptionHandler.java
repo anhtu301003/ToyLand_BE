@@ -1,6 +1,6 @@
 package com.toyland.order_service.exception;
 
-import com.toyland.user_service.dto.ApiResponse;
+import com.toyland.order_service.dto.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

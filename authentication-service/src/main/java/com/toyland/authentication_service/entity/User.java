@@ -3,7 +3,10 @@ package com.toyland.authentication_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -29,4 +32,12 @@ public class User {
     boolean emailVerified;
     @ManyToMany
     Set<Role> roles;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    LocalDateTime updatedAt;
 }

@@ -3,17 +3,16 @@ package com.toyland.user_service.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProfileCreationRequest {
-    String userId;
-    String firstName;
-    String lastName;
-    LocalDate dob;
+public class UserAddressRequest {
+    String phoneNumber;
     String city;
+    String state;
+    String country;
+    String postalCode;
+    boolean isDefault;
 }

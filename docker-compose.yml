@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   kafka:
@@ -15,3 +15,26 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    networks:
+      - backend
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 12345678
+      MONGO_INITDB_DATABASE: product-service
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - backend
+
+volumes:
+  mongodata:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge

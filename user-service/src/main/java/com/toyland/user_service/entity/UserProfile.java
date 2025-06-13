@@ -1,30 +1,48 @@
 package com.toyland.user_service.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+@Builder
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EntityListeners(AuditingEntityListener.class)
 public class UserProfile {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-
     String userId;
+    String email;
+    String fullName;
+    String avatarUrl;
+    LocalDate birthDay;
+    String phoneNumber;
+    String gender;
 
-    String firstName;
-    String lastName;
-    LocalDate dob;
-    String city;
+    Boolean admin;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<UserAddress> addresses;
+
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    LocalDateTime updatedAt;
 }
