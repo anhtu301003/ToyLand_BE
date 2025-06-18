@@ -13,6 +13,7 @@ import com.toyland.authentication_service.mapper.UserProfileMapper;
 import com.toyland.authentication_service.repository.RoleRepository;
 import com.toyland.authentication_service.repository.UserRepository;
 import com.toyland.authentication_service.repository.httpclient.UserClient;
+import com.toyland.event.dto.CreateCartEvent;
 import com.toyland.event.dto.NotificationEvent;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
@@ -73,7 +74,13 @@ public class UserService {
                 .build();
 
         //Publish message to kafka
-        kafkaTemplate.send("notification-delivery",notificationEvent);
+        kafkaTemplate.send("notification-delivery", notificationEvent);
+
+        CreateCartEvent cartEvent = CreateCartEvent.builder()
+                .userId(user.getId())
+                .build();
+
+        kafkaTemplate.send("cart-delivery", cartEvent);
 
         return userMapper.toUserResponse(user);
     }

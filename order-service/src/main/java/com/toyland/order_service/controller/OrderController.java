@@ -3,15 +3,15 @@ package com.toyland.order_service.controller;
 import com.toyland.order_service.dto.ApiResponse;
 import com.toyland.order_service.dto.request.OrderRequest;
 import com.toyland.order_service.dto.response.OrderResponse;
-import com.toyland.order_service.service.OrderFacade;
 import com.toyland.order_service.service.OrderService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -20,26 +20,28 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderController {
     OrderService orderService;
-    OrderFacade orderFacade;
 
     @PostMapping
     public ApiResponse<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderFacade.createOrder(orderRequest))
+                .result(orderService.createOrder(orderRequest))
                 .build();
     }
 
     @GetMapping
-    public ApiResponse<List<OrderResponse>> getAllOrders() {
-        return ApiResponse.<List<OrderResponse>>builder()
-                .result(orderService.getAllOrders())
+    public ApiResponse<Page<OrderResponse>> getAllOrders(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ApiResponse.<Page<OrderResponse>>builder()
+                .result(orderService.getAllOrders(PageRequest.of(page - 1, size)))
                 .build();
     }
 
     @PutMapping("/{orderId}")
-    public ApiResponse<OrderResponse> updateStatusOrder(@PathVariable String orderId ,@RequestBody OrderRequest orderRequest) {
+    public ApiResponse<OrderResponse> updateStatusOrder(@PathVariable String orderId, @RequestBody OrderRequest orderRequest) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderService.updateStatusOrder(orderId,orderRequest))
+                .result(orderService.updateStatusOrder(orderId, orderRequest))
                 .build();
     }
 

@@ -5,6 +5,8 @@ import com.toyland.user_service.dto.response.UserAddressResponse;
 import com.toyland.user_service.dto.response.UserProfileResponse;
 import com.toyland.user_service.entity.UserAddress;
 import com.toyland.user_service.entity.UserProfile;
+import com.toyland.user_service.exception.AppException;
+import com.toyland.user_service.exception.ErrorCode;
 import com.toyland.user_service.mapper.UserAddressMapper;
 import com.toyland.user_service.mapper.UserProfileMapper;
 import com.toyland.user_service.repository.UserAddressRepository;
@@ -23,12 +25,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserAddressService implements IUserAddressService {
     UserAddressRepository userAddressRepository;
     UserProfileRepository userProfileRepository;
     UserAddressMapper userAddressMapper;
     UserProfileMapper userProfileMapper;
+
     @Override
     public List<UserAddressResponse> getAddressByUserId(String userId) {
         List<UserAddress> addresses = userAddressRepository.findAllByUserUserId(userId);
@@ -43,7 +46,7 @@ public class UserAddressService implements IUserAddressService {
             UserProfile userProfile = optUserProfile.get();
             List<UserAddress> userAddresses = userProfile.getAddresses();
 
-            if(userAddresses.isEmpty()) {
+            if (userAddresses.isEmpty()) {
                 userAddress.setIsDefault(true);
             }
 
@@ -56,20 +59,21 @@ public class UserAddressService implements IUserAddressService {
             userAddressRepository.save(userAddress);
 
             return userProfileMapper.toUserProfileResponse(userProfile);
+        } else {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
-        return null;
     }
 
     @Override
     public UserAddressResponse updateAddressByAddressId(String addressId, UserAddressRequest userAddressRequest) {
         UserAddress updatedUserAddress = userAddressRepository.findById(addressId).orElse(null);
-        userAddressMapper.updateEntity(updatedUserAddress,userAddressRequest);
+        userAddressMapper.updateEntity(updatedUserAddress, userAddressRequest);
         return userAddressMapper.toUserAddressResponse(userAddressRepository.save(updatedUserAddress));
     }
 
     @Override
     public String deleteAddressByAddressId(String addressId) {
-        if(userAddressRepository.existsById(addressId)) {
+        if (userAddressRepository.existsById(addressId)) {
             userAddressRepository.deleteById(addressId);
             return "Address successfully deleted";
         }

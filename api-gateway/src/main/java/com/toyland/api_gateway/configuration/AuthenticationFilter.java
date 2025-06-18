@@ -41,7 +41,10 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "/identity/.*",
             "/user/.*",
             "/notification/email/send",
-            "/product.*"
+            "/product/.*",
+            "/cart/.*",
+            "/order/.*",
+            "/inventory/.*"
     };
 
     @Value("${app.api-prefix}")
@@ -52,13 +55,13 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         log.info("AuthenticationFilter ....");
 
-        if(isPublicEndpoint(exchange.getRequest())){
+        if (isPublicEndpoint(exchange.getRequest())) {
             return chain.filter(exchange);
         }
         //Get token from authorization header
         List<String> authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
 
-        if(CollectionUtils.isEmpty(authHeader)) {
+        if (CollectionUtils.isEmpty(authHeader)) {
             return unauthenticated(exchange.getResponse());
         }
 
@@ -67,9 +70,9 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         return authenticationService.introspect(token).flatMap(
                 introspectApiResponse -> {
-                    if(introspectApiResponse.getResult().isValid()){
+                    if (introspectApiResponse.getResult().isValid()) {
                         return chain.filter(exchange);
-                    }else
+                    } else
                         return unauthenticated(exchange.getResponse());
                 }
         ).onErrorResume(throwable -> unauthenticated(exchange.getResponse()));
@@ -87,7 +90,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     }
 
 
-    public Mono<Void> unauthenticated(ServerHttpResponse response){
+    public Mono<Void> unauthenticated(ServerHttpResponse response) {
         ApiResponse<?> apiResponse = ApiResponse.builder()
                 .code(1401)
                 .message("Unauthenticated")

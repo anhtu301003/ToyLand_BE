@@ -31,46 +31,45 @@ public class UserProfileService {
     UserProfileMapper userProfileMapper;
 
     @Transactional
-    public UserProfileResponse createUserProfile(CreateUserRequest request){
+    public UserProfileResponse createUserProfile(CreateUserRequest request) {
         UserProfile userProfile = userProfileRepository.save(userProfileMapper.toUserProfile(request));
         return userProfileMapper.toUserProfileResponse(userProfile);
     }
 
     @Transactional
-    public void createUserProfile(CreateUserEvent createUserEvent){
+    public void createUserProfile(CreateUserEvent createUserEvent) {
         UserProfile userProfile = userProfileMapper.toUserProfile(createUserEvent);
         userProfileRepository.save(userProfile);
     }
 
-    public UserProfileResponse getProfile(String userId){
+    public UserProfileResponse getProfile(String userId) {
         Optional<UserProfile> userProfile = userProfileRepository.findByUserId(userId);
-        if(userProfile.isPresent()){
+        if (userProfile.isPresent()) {
             return userProfileMapper.toUserProfileResponse(userProfile.get());
-        }else{
+        } else {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
     }
 
-    public UserEmailProfileResponse getProfileEmail(String userId){
+    public UserEmailProfileResponse getProfileEmail(String userId) {
         Optional<UserProfile> userProfile = userProfileRepository.findByUserId(userId);
-        if(userProfile.isPresent()){
+        if (userProfile.isPresent()) {
             return userProfileMapper.toUserEmailProfileResponse(userProfile.get());
-        }
-        else{
+        } else {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
-    public Page<UserProfileResponse> getAllProfiles(Pageable Pageable){
-        return userProfileRepository.findAll(Pageable).map(uprofile -> userProfileMapper.toUserProfileResponse(uprofile));
+    //    @PreAuthorize("hasRole('ADMIN')")
+    public Page<UserProfileResponse> getAllProfiles(Pageable Pageable) {
+        return userProfileRepository.findAll(Pageable).map(userProfileMapper::toUserProfileResponse);
     }
 
     @Transactional
-    public UserProfileResponse updateUserProfile(String id,UserProfileRequest request) {
+    public UserProfileResponse updateUserProfile(String id, UserProfileRequest request) {
         UserProfile userProfile = userProfileRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        userProfileMapper.updateUserProfile(userProfile,request);
+        userProfileMapper.updateUserProfile(userProfile, request);
 
         userProfile = userProfileRepository.save(userProfile);
         return userProfileMapper.toUserProfileResponse(userProfile);
@@ -78,15 +77,15 @@ public class UserProfileService {
 
     @Transactional
     public String deleteUserProfile(String id) {
-        try{
+        try {
             Optional<UserProfile> userProfile = userProfileRepository.findByUserId(id);
-            if(userProfile.isPresent()){
+            if (userProfile.isPresent()) {
                 userProfileRepository.deleteByUserId(id);
                 return "delete success";
-            }else{
+            } else {
                 throw new AppException(ErrorCode.USER_NOT_EXISTED);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }

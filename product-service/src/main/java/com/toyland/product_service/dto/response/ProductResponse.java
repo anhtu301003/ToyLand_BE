@@ -1,17 +1,8 @@
 package com.toyland.product_service.dto.response;
 
 import com.toyland.product_service.Enum.StatusProduct;
-import com.toyland.product_service.entity.Attribute;
-import com.toyland.product_service.entity.Brand;
-import com.toyland.product_service.entity.Category;
-import com.toyland.product_service.entity.Product;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -40,6 +31,6 @@ public class ProductResponse {
     Boolean newProduct;// đánh dấu là sản phẩm mới
     int viewsCount; //lượt xem
     List<String> image;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    Date createdAt;
+    Date updatedAt;
 }

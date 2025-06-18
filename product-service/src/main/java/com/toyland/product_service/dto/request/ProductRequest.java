@@ -2,20 +2,10 @@ package com.toyland.product_service.dto.request;
 
 
 import com.toyland.product_service.Enum.StatusProduct;
-import com.toyland.product_service.entity.Attribute;
-import com.toyland.product_service.entity.Brand;
-import com.toyland.product_service.entity.Category;
-import com.toyland.product_service.entity.Product;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data

@@ -22,6 +22,13 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
+@Table(
+        name = "user_profile",
+        indexes = {
+                @Index(name = "idx_fullName", columnList = "full_name"),
+                @Index(name = "idx_email", columnList = "email")
+        }
+)
 public class UserProfile {
     @Id
     String userId;

@@ -1,6 +1,7 @@
 package com.toyland.order_service.dto.request;
 
 import com.toyland.order_service.Enum.OrderStatusEnum;
+import com.toyland.order_service.entity.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,14 +20,10 @@ import java.util.List;
 @Builder
 public class OrderRequest {
     String userId;
-
     OrderStatusEnum orderStatus;
-
-    BigDecimal totalPrice;
-
-    String shippingAddress;
-
+    int totalPrice;
+    int totalQuantity;
+    String paymentName;
     String paymentId;
-
     List<OrderItemRequest> orderItems;
 }

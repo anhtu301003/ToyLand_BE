@@ -9,6 +9,7 @@ import com.toyland.inventory_service.service.IService.IInventoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class InventoryService implements IInventoryService {
     InventoryRepository inventoryRepository;
     InventoryMapper inventoryMapper;
     LowStockNotificationService lowStockNotificationService;
+
     @Override
     public InventoryResponse createInventory(InventoryRequest request) {
         Inventory inventory = inventoryMapper.toInventory(request);
@@ -34,8 +36,8 @@ public class InventoryService implements IInventoryService {
     }
 
     @Override
-    public List<InventoryResponse> getAllInventories(Long warehouseId, Pageable pageable) {
-        return inventoryRepository.findAll().stream().map(inventoryMapper::toInventoryResponse).toList();
+    public Page<InventoryResponse> getAllInventories(Long warehouseId, Pageable pageable) {
+        return inventoryRepository.findAll(pageable).map(inventoryMapper::toInventoryResponse);
     }
 
     @Override
@@ -43,9 +45,9 @@ public class InventoryService implements IInventoryService {
         if (!inventoryRepository.existsById(inventoryId)) {
             return "Inventory with id " + inventoryId + " does not exist";
         }
-        try{
+        try {
             inventoryRepository.deleteById(inventoryId);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return e.getMessage();
         }
         return "Inventory deleted successfully";
@@ -58,7 +60,7 @@ public class InventoryService implements IInventoryService {
 //        }
         Inventory inventory = inventoryRepository.findById(inventoryId).orElse(null);
         inventoryMapper.updateInventoryFromRequest(request, inventory);
-        return inventoryMapper.toInventoryResponse( inventoryRepository.save(inventory));
+        return inventoryMapper.toInventoryResponse(inventoryRepository.save(inventory));
     }
 
 }

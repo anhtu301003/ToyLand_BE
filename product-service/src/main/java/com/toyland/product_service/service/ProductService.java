@@ -19,10 +19,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -166,7 +163,6 @@ public class ProductService implements IProductService {
             if (!categoryIds.isEmpty()) {
                 query.addCriteria(Criteria.where("category").in(categoryIds));
             } else {
-                // Nếu không có category nào match thì trả về rỗng luôn
                 return new PageImpl<>(List.of(), pageable, 0);
             }
         }
@@ -184,9 +180,12 @@ public class ProductService implements IProductService {
             }
         }
 
+        // Sắp xếp theo createAt giảm dần
+        query.with(Sort.by(Sort.Direction.DESC, "createdAt"));
 
         long total = mongoTemplate.count(query, Product.class);
 
+        // Áp dụng phân trang
         query.with(pageable);
 
         List<Product> products = mongoTemplate.find(query, Product.class);

@@ -23,9 +23,9 @@ import java.util.List;
 @Builder
 @Table(name = "orders",
         indexes = {
-            @Index(name = "idx_user_id", columnList = "user_id"),
-            @Index(name = "idx_order_status", columnList = "order_status")
-    })
+                @Index(name = "idx_user_id", columnList = "user_id"),
+                @Index(name = "idx_order_status", columnList = "order_status")
+        })
 @EntityListeners(AuditingEntityListener.class)
 public class Order implements Subject {
     @Id
@@ -35,19 +35,25 @@ public class Order implements Subject {
     String userId;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     OrderStatusEnum orderStatus = OrderStatusEnum.PENDING;
 
-    BigDecimal totalPrice;
+    int totalPrice;
+
+    int totalQuantity;
 
     String shippingAddress;
 
     String paymentId;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<OrderItem> orderItems = new ArrayList<>();
+
     @CreatedDate
-    LocalDateTime createTime;
+    LocalDateTime createdAt;
 
     @LastModifiedDate
-    LocalDateTime updateTime;
+    LocalDateTime updatedAt;
 
     @Transient
     List<OrderObserver> observers = new ArrayList<>();

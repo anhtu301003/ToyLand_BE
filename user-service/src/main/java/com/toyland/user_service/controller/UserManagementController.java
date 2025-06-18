@@ -15,20 +15,20 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/users")
+@RequestMapping("/user-management")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class UserManagementController {
 
     UserProfileService userProfileService;
 
-    @GetMapping
+    @GetMapping("/users")
     public ApiResponse<Page<UserProfileResponse>> getAllProfiles(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
-    ){
+    ) {
         return ApiResponse.<Page<UserProfileResponse>>builder()
-                .result(userProfileService.getAllProfiles(PageRequest.of(page,size)))
+                .result(userProfileService.getAllProfiles(PageRequest.of(page, size)))
                 .build();
     }
 //
