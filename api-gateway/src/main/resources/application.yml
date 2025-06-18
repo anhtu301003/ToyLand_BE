@@ -59,10 +59,10 @@ spring:
           filters:
             - StripPrefix=2
 
-        - id: review-service
+        - id: promotion-service
           uri: http://localhost:8087
           predicates:
-            - Path=${app.api-prefix}/review/**
+            - Path=${app.api-prefix}/promotion/**
           filters:
             - StripPrefix=2
 

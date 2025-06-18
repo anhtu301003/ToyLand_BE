@@ -23,6 +23,7 @@ public class WebClientConfiguration {
                 .baseUrl("http://localhost:8083/cart")
                 .baseUrl("http://localhost:8084/inventory")
                 .baseUrl("http://localhost:8085/order")
+                .baseUrl("http://localhost:8087/promotion")
                 .build();
     }
 
