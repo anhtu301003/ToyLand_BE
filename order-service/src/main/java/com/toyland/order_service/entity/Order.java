@@ -32,19 +32,27 @@ public class Order implements Subject {
     @GeneratedValue(strategy = GenerationType.UUID)
     String orderId;
 
-    String userId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "user_order_id")
+    UserOrder userOrder;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "address_id")
+    AddressOrder addressOrder;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
     OrderStatusEnum orderStatus = OrderStatusEnum.PENDING;
 
+    String orderDescription;
+
     int totalPrice;
 
     int totalQuantity;
 
-    String shippingAddress;
-
     String paymentId;
+
+    String paymentType;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     List<OrderItem> orderItems = new ArrayList<>();

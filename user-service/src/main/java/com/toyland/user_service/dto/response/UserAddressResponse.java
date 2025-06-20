@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 public class UserAddressResponse {
     String id;
     String phoneNumber;
-    String city;
-    String state;
+    String province;
+    String street;
     String country;
     String postalCode;
     Boolean isDefault;

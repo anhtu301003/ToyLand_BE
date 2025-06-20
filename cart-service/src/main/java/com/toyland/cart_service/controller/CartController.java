@@ -41,9 +41,6 @@ public class CartController {
 
     @DeleteMapping("/{cartId}/items")
     public ApiResponse<CartResponse> deleteAllItemFromCart(@PathVariable String cartId) {
-        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userId = jwt.getClaims().get("userId").toString();
-
         return ApiResponse.<CartResponse>builder()
                 .result(cartService.deleteAllItemFromCart(cartId))
                 .build();

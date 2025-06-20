@@ -38,11 +38,11 @@ public class InventoryController {
 
     @GetMapping()
     public ApiResponse<Page<InventoryResponse>> GetAllInventories(
-            @RequestParam(required = false) Long warehouseId,
+            @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ApiResponse.<Page<InventoryResponse>>builder()
-                .result(inventoryService.getAllInventories(warehouseId, PageRequest.of(page - 1, size)))
+                .result(inventoryService.getAllInventories(productName, PageRequest.of(page - 1, size)))
                 .build();
     }
 

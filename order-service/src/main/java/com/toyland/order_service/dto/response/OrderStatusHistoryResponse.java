@@ -15,11 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderStatusHistoryResponse {
     String historyId;
-
     String orderId;
-
     String status;
-
     String statusNote;
     LocalDateTime createdAt;
 }

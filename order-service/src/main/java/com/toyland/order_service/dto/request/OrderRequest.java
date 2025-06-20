@@ -1,6 +1,9 @@
 package com.toyland.order_service.dto.request;
 
 import com.toyland.order_service.Enum.OrderStatusEnum;
+import com.toyland.order_service.dto.response.AddressOrderResponse;
+import com.toyland.order_service.dto.response.OrderItemResponse;
+import com.toyland.order_service.dto.response.UserOrderResponse;
 import com.toyland.order_service.entity.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,11 +22,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class OrderRequest {
-    String userId;
-    OrderStatusEnum orderStatus;
+    UserOrderRequest userOrder;
+    AddressOrderRequest addressOrder;
+    String orderDescription;
     int totalPrice;
     int totalQuantity;
-    String paymentName;
     String paymentId;
+    String paymentType;
     List<OrderItemRequest> orderItems;
 }

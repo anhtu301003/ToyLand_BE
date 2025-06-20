@@ -41,4 +41,7 @@ public class OrderItem {
 
     @CreatedDate
     LocalDateTime createdAt;
+
+    @LastModifiedDate
+    LocalDateTime updatedAt;
 }

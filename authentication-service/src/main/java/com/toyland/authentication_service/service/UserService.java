@@ -123,4 +123,11 @@ public class UserService {
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
+
+    public Boolean validateEmail(String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        user.setEmailVerified(true);
+        return user.getEmailVerified();
+    }
 }

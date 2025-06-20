@@ -2,6 +2,7 @@ package com.toyland.product_service.service;
 
 import com.toyland.event.dto.CreateProductEvent;
 import com.toyland.product_service.dto.request.ProductRequest;
+import com.toyland.product_service.dto.request.UpdateTrendingRequest;
 import com.toyland.product_service.dto.response.ProductResponse;
 import com.toyland.product_service.entity.Brand;
 import com.toyland.product_service.entity.Category;
@@ -147,7 +148,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<ProductResponse> getAllProducts(PageRequest pageable, String nameProduct, String category, String brand) {
+    public Page<ProductResponse> getAllProducts(PageRequest pageable, String nameProduct, String category, String brand, Boolean trending) {
         Query query = new Query();
 
         if (nameProduct != null && !nameProduct.isEmpty()) {
@@ -180,6 +181,11 @@ public class ProductService implements IProductService {
             }
         }
 
+        if (trending != null) {
+            query.addCriteria(Criteria.where("trending").is(trending));
+        }
+
+
         // Sắp xếp theo createAt giảm dần
         query.with(Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -194,4 +200,15 @@ public class ProductService implements IProductService {
 
         return new PageImpl<>(responses, pageable, total);
     }
+
+    @Override
+    public ProductResponse updateProductTrending(UpdateTrendingRequest updateTrendingRequest, String productId) {
+        Product product = productRepository.findProductById(productId);
+        if (product == null) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXIST);
+        }
+        product.setTrending(updateTrendingRequest.getTrending());
+        return productMapper.toProductResponse(productRepository.save(product));
+    }
+
 }

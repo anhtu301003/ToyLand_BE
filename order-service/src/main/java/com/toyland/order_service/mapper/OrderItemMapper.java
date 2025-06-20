@@ -13,6 +13,9 @@ public interface OrderItemMapper {
     @Mapping(target = "orderItemId", ignore = true)
     @Mapping(target = "order", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "productImage", source = "productImage")
+    @Mapping(target = "price", source = "price")
     OrderItem toOrderItem(OrderItemRequest orderItemRequest);
 
     @Mapping(target = "orderId", source = "order.orderId")

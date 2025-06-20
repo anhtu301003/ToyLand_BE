@@ -27,9 +27,11 @@ public class SearchAndFilterController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String nameProduct,
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) String brand) {
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) Boolean trending
+    ) {
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productService.getAllProducts(PageRequest.of(page - 1, size), nameProduct, category, brand))
+                .result(productService.getAllProducts(PageRequest.of(page - 1, size), nameProduct, category, brand, trending))
                 .build();
     }
 
@@ -44,7 +46,7 @@ public class SearchAndFilterController {
             @RequestParam(defaultValue = "10") int size,
             @PathVariable String category) {
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productService.getAllProducts(PageRequest.of(page - 1, size), "", category, ""))
+                .result(productService.getAllProducts(PageRequest.of(page - 1, size), "", category, "", null))
                 .build();
     }
 

@@ -31,3 +31,4 @@ server:
 app:
   services:
     user: http://localhost:8081/user
+    inventory: http://localhost:8084/inventory

@@ -2,6 +2,7 @@ package com.toyland.order_service.controller;
 
 import com.toyland.order_service.dto.ApiResponse;
 import com.toyland.order_service.dto.request.OrderRequest;
+import com.toyland.order_service.dto.request.UpdateStatusOrder;
 import com.toyland.order_service.dto.response.OrderResponse;
 import com.toyland.order_service.service.OrderService;
 import lombok.AccessLevel;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,17 +34,33 @@ public class OrderController {
     @GetMapping
     public ApiResponse<Page<OrderResponse>> getAllOrders(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status
     ) {
+        int pageNumber = Math.max(page, 1);
         return ApiResponse.<Page<OrderResponse>>builder()
-                .result(orderService.getAllOrders(PageRequest.of(page - 1, size)))
+                .result(orderService.getAllOrders(PageRequest.of(pageNumber - 1, size), search, status))
                 .build();
     }
 
-    @PutMapping("/{orderId}")
-    public ApiResponse<OrderResponse> updateStatusOrder(@PathVariable String orderId, @RequestBody OrderRequest orderRequest) {
+    @GetMapping("/user")
+    public ApiResponse<Page<OrderResponse>> getAllOrdersByUserId(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userId = jwt.getClaims().get("userId").toString();
+        int pageNumber = Math.max(page, 1);
+        return ApiResponse.<Page<OrderResponse>>builder()
+                .result(orderService.getAllOrdersByUserId(PageRequest.of(pageNumber - 1, size), userId))
+                .build();
+    }
+
+    @PatchMapping("/{orderId}")
+    public ApiResponse<OrderResponse> updateStatusOrder(@PathVariable String orderId, @RequestBody UpdateStatusOrder updateStatusOrder) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderService.updateStatusOrder(orderId, orderRequest))
+                .result(orderService.updateStatusOrder(orderId, updateStatusOrder))
                 .build();
     }
 
