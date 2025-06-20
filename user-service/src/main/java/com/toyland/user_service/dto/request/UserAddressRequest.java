@@ -10,8 +10,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserAddressRequest {
     String phoneNumber;
-    String city;
-    String state;
+    String province;
+    String street;
     String country;
     String postalCode;
     boolean isDefault;

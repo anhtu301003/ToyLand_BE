@@ -14,19 +14,20 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductEventListener {
     InventoryRepository inventoryRepository;
     InventoryMapper inventoryMapper;
     LowStockNotificationService lowStockNotificationService;
-    @KafkaListener(topics = "product-events",groupId = "inventory-group")
+
+    @KafkaListener(topics = "product-events", groupId = "inventory-group")
     public void handleProductCreated(CreateProductEvent productEvent) {
         log.info("Handling product event: {}", productEvent);
 
         Inventory inventory = Inventory.builder()
                 .productId(productEvent.getProductId())
                 .productName(productEvent.getProductName())
-                .quantity(-1)
+                .quantity(100)
                 .lowStockThreshold(5)
                 .build();
         lowStockNotificationService.checkAndNotifyLowStock(inventory);

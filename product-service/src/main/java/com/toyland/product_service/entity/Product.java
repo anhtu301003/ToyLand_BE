@@ -6,7 +6,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,7 +30,7 @@ public class Product {
     @Indexed(unique = true)
     String sku;// mã sản phẩm duy nhất
 
-    @Indexed
+    @TextIndexed
     String name;//tên sản phẩm
 
     @Indexed(unique = true)
@@ -66,8 +69,8 @@ public class Product {
     List<String> image;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    Date createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    Date updatedAt;
 }

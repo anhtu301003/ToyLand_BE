@@ -23,31 +23,45 @@ import java.util.List;
 @Builder
 @Table(name = "orders",
         indexes = {
-            @Index(name = "idx_user_id", columnList = "user_id"),
-            @Index(name = "idx_order_status", columnList = "order_status")
-    })
+                @Index(name = "idx_user_id", columnList = "user_id"),
+                @Index(name = "idx_order_status", columnList = "order_status")
+        })
 @EntityListeners(AuditingEntityListener.class)
 public class Order implements Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String orderId;
 
-    String userId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "user_order_id")
+    UserOrder userOrder;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "address_id")
+    AddressOrder addressOrder;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     OrderStatusEnum orderStatus = OrderStatusEnum.PENDING;
 
-    BigDecimal totalPrice;
+    String orderDescription;
 
-    String shippingAddress;
+    int totalPrice;
+
+    int totalQuantity;
 
     String paymentId;
 
+    String paymentType;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<OrderItem> orderItems = new ArrayList<>();
+
     @CreatedDate
-    LocalDateTime createTime;
+    LocalDateTime createdAt;
 
     @LastModifiedDate
-    LocalDateTime updateTime;
+    LocalDateTime updatedAt;
 
     @Transient
     List<OrderObserver> observers = new ArrayList<>();

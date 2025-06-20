@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -24,6 +25,9 @@ public class Inventory {
     String productId;
 
     String productName;
+
+    @ElementCollection
+    List<String> productImage;
 
     int quantity;
 

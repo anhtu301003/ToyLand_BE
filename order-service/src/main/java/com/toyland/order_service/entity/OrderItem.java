@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -22,21 +24,24 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     String orderItemId;
 
-
-    String orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false, updatable = false)
+    Order order;
 
     String productId;
 
     String productName;
 
-    String productImage;
+    @ElementCollection
+    List<String> productImage;
 
     int quantity;
 
-    BigDecimal unitPrice;
-
-    BigDecimal subTotalPrice;
+    int price;
 
     @CreatedDate
-    LocalDateTime createTime;
+    LocalDateTime createdAt;
+
+    @LastModifiedDate
+    LocalDateTime updatedAt;
 }

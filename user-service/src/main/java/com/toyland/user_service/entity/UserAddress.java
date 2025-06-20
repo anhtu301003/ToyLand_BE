@@ -25,8 +25,8 @@ public class UserAddress {
     String id;
 
     String phoneNumber;
-    String city;
-    String state;
+    String street;
+    String province;
     String country;
     String postalCode;
 

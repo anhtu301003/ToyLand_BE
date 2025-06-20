@@ -2,6 +2,7 @@ package com.toyland.product_service.service;
 
 import com.toyland.event.dto.CreateProductEvent;
 import com.toyland.product_service.dto.request.ProductRequest;
+import com.toyland.product_service.dto.request.UpdateTrendingRequest;
 import com.toyland.product_service.dto.response.ProductResponse;
 import com.toyland.product_service.entity.Brand;
 import com.toyland.product_service.entity.Category;
@@ -19,10 +20,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -150,7 +148,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<ProductResponse> getAllProducts(PageRequest pageable, String nameProduct, String category, String brand) {
+    public Page<ProductResponse> getAllProducts(PageRequest pageable, String nameProduct, String category, String brand, Boolean trending) {
         Query query = new Query();
 
         if (nameProduct != null && !nameProduct.isEmpty()) {
@@ -166,7 +164,6 @@ public class ProductService implements IProductService {
             if (!categoryIds.isEmpty()) {
                 query.addCriteria(Criteria.where("category").in(categoryIds));
             } else {
-                // Nếu không có category nào match thì trả về rỗng luôn
                 return new PageImpl<>(List.of(), pageable, 0);
             }
         }
@@ -184,9 +181,17 @@ public class ProductService implements IProductService {
             }
         }
 
+        if (trending != null) {
+            query.addCriteria(Criteria.where("trending").is(trending));
+        }
+
+
+        // Sắp xếp theo createAt giảm dần
+        query.with(Sort.by(Sort.Direction.DESC, "createdAt"));
 
         long total = mongoTemplate.count(query, Product.class);
 
+        // Áp dụng phân trang
         query.with(pageable);
 
         List<Product> products = mongoTemplate.find(query, Product.class);
@@ -195,4 +200,15 @@ public class ProductService implements IProductService {
 
         return new PageImpl<>(responses, pageable, total);
     }
+
+    @Override
+    public ProductResponse updateProductTrending(UpdateTrendingRequest updateTrendingRequest, String productId) {
+        Product product = productRepository.findProductById(productId);
+        if (product == null) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXIST);
+        }
+        product.setTrending(updateTrendingRequest.getTrending());
+        return productMapper.toProductResponse(productRepository.save(product));
+    }
+
 }

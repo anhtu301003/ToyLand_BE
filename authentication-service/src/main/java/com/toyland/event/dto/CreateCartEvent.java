@@ -1,4 +1,5 @@
-package com.toyland.product_service.entity;
+package com.toyland.event.dto;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Attribute{
-    String name;
-    String value;
+public class CreateCartEvent {
+    String userId;
 }

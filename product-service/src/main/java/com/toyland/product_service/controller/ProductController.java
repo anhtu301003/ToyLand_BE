@@ -2,6 +2,7 @@ package com.toyland.product_service.controller;
 
 import com.toyland.product_service.dto.ApiResponse;
 import com.toyland.product_service.dto.request.ProductRequest;
+import com.toyland.product_service.dto.request.UpdateTrendingRequest;
 import com.toyland.product_service.dto.response.ProductResponse;
 import com.toyland.product_service.service.ProductService;
 import lombok.AccessLevel;
@@ -47,6 +48,13 @@ public class ProductController {
     public ApiResponse<ProductResponse> updateProductById(@RequestBody ProductRequest productRequest, @PathVariable String id) {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.updateProduct(productRequest, id))
+                .build();
+    }
+
+    @PatchMapping("/{productId}/trending")
+    public ApiResponse<ProductResponse> updateProductTrending(@RequestBody UpdateTrendingRequest updateTrendingRequest, @PathVariable String productId) {
+        return ApiResponse.<ProductResponse>builder()
+                .result(productService.updateProductTrending(updateTrendingRequest, productId))
                 .build();
     }
 

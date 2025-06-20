@@ -1,5 +1,6 @@
 package com.toyland.order_service.dto.request;
 
+import com.toyland.order_service.dto.response.OrderResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -15,17 +17,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class OrderItemRequest {
-    String orderId;
-
     String productId;
-
     String productName;
-
-    String productImage;
-
+    List<String> productImage;
     int quantity;
-
-    BigDecimal unitPrice;
-
-    BigDecimal subTotalPrice;
+    int price;
 }

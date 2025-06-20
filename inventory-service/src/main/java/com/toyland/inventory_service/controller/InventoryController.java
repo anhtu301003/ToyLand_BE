@@ -7,6 +7,8 @@ import com.toyland.inventory_service.service.InventoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,17 +37,19 @@ public class InventoryController {
     }
 
     @GetMapping()
-    public ApiResponse<List<InventoryResponse>> GetAllInventories(@RequestParam(required = false) Long warehouseId,
-                                                                  Pageable pageable) {
-        return ApiResponse.<List<InventoryResponse>>builder()
-                .result(inventoryService.getAllInventories(warehouseId,pageable))
+    public ApiResponse<Page<InventoryResponse>> GetAllInventories(
+            @RequestParam(required = false) String productName,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<Page<InventoryResponse>>builder()
+                .result(inventoryService.getAllInventories(productName, PageRequest.of(page - 1, size)))
                 .build();
     }
 
     @PutMapping("/{inventoryId}")
     public ApiResponse<InventoryResponse> UpdateInventory(@PathVariable String inventoryId, @RequestBody InventoryRequest request) {
         return ApiResponse.<InventoryResponse>builder()
-                .result(inventoryService.updateInventory(inventoryId,request))
+                .result(inventoryService.updateInventory(inventoryId, request))
                 .build();
     }
 

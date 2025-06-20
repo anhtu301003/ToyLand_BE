@@ -13,6 +13,7 @@ import com.toyland.authentication_service.mapper.UserProfileMapper;
 import com.toyland.authentication_service.repository.RoleRepository;
 import com.toyland.authentication_service.repository.UserRepository;
 import com.toyland.authentication_service.repository.httpclient.UserClient;
+import com.toyland.event.dto.CreateCartEvent;
 import com.toyland.event.dto.NotificationEvent;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
@@ -73,7 +74,13 @@ public class UserService {
                 .build();
 
         //Publish message to kafka
-        kafkaTemplate.send("notification-delivery",notificationEvent);
+        kafkaTemplate.send("notification-delivery", notificationEvent);
+
+        CreateCartEvent cartEvent = CreateCartEvent.builder()
+                .userId(user.getId())
+                .build();
+
+        kafkaTemplate.send("cart-delivery", cartEvent);
 
         return userMapper.toUserResponse(user);
     }
@@ -115,5 +122,12 @@ public class UserService {
     public UserResponse getUser(String id) {
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
+    }
+
+    public Boolean validateEmail(String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        user.setEmailVerified(true);
+        return user.getEmailVerified();
     }
 }

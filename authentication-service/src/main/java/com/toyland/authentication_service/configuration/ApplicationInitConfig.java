@@ -8,6 +8,7 @@ import com.toyland.authentication_service.entity.User;
 import com.toyland.authentication_service.repository.RoleRepository;
 import com.toyland.authentication_service.repository.UserRepository;
 import com.toyland.authentication_service.repository.httpclient.UserClient;
+import com.toyland.event.dto.CreateCartEvent;
 import com.toyland.event.dto.CreateUserEvent;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ import java.util.HashSet;
 public class ApplicationInitConfig {
 
     PasswordEncoder passwordEncoder;
-    KafkaTemplate<String,Object> kafkaTemplate;
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     @NonFinal
     static final String ADMIN_USER_NAME = "admin";
@@ -76,7 +77,11 @@ public class ApplicationInitConfig {
                         .build();
 
                 kafkaTemplate.send("user-delivery", userCreationEvent);
+                CreateCartEvent cartEvent = CreateCartEvent.builder()
+                        .userId(saveUser.getId())
+                        .build();
 
+                kafkaTemplate.send("cart-delivery", cartEvent);
                 log.warn("admin user has been created with default password: admin, please change it");
             }
             log.info("Application initialization completed .....");
