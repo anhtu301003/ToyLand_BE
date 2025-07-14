@@ -1,27 +1,10 @@
-
-server:
-  port: 8088
-  servlet:
-    context-path: /notification
-
-
-
 spring:
   application:
     name: notification-service
-  data:
-    mongodb:
-      uri: mongodb+srv://tuanhdao2:Tu555668%40@notification-service.4tr3int.mongodb.net/notificaiton-service
 
-  kafka:
-    bootstrap-servers: localhost:9094
-    consumer:
-      group-id: notification-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "*"
+  config:
+    import: configserver:http://localhost:9999
 
-app:
-  brevo-key: "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"
+  cloud:
+    config:
+      fail-fast: true
